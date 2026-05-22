@@ -1,246 +1,333 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lachmitya Premitim • Luxury</title>
+    <title>LACHMITTYA PREMIUM BOUTIQUE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .logo-font { font-family: 'Playfair Display', serif; }
-        .gold { color: #d4af37; }
-        .product-card { transition: all 0.4s ease; }
-        .product-card:hover { transform: scale(1.05); }
+        .font-luxury { font-family: 'Cinzel', serif; }
+        .font-main { font-family: 'Montserrat', sans-serif; }
+        .gold-gradient { background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%); }
+        .gold-text { background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .bg-luxury-black { background-color: #09090b; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-zinc-950 text-white">
+<body class="bg-luxury-black text-zinc-300 font-main antialiased selection:bg-amber-500/30 selection:text-amber-200">
 
-    <header class="fixed top-0 w-full bg-black/95 backdrop-blur-xl z-50 border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 border border-amber-400 rounded-full flex items-center justify-center text-3xl logo-font">L</div>
-                <span class="logo-font text-3xl gold">Lachmitya Premitim</span>
+    <header class="sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-900 px-4 py-4 md:px-8 flex justify-between items-center">
+        <div class="flex flex-col">
+            <span class="font-luxury text-xl md:text-2xl font-bold tracking-[0.2em] gold-text">LACHMITTYA</span>
+            <span class="text-[9px] uppercase tracking-[0.4em] text-zinc-500 font-medium -mt-1">Digital Premium Boutique</span>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <div class="relative cursor-pointer hover:opacity-80 transition" onclick="toggleCart()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-amber-500/90">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1,0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0,1-1.12-1.243l1.264-12A1.125 1.125 0 0,1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1,1-.75 0 .375.375 0 0,1 .75 0Zm7.5 0a.375.375 0 1,1-.75 0 .375.375 0 0,1 .75 0Z" />
+                </svg>
+                <div id="cart-badge" class="absolute -top-2 -right-2 bg-amber-500 text-black font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center hidden">0</div>
             </div>
-
-            <nav class="flex gap-8 text-sm uppercase tracking-widest">
-                <a href="#" class="hover:text-amber-400">Home</a>
-                <a href="#" class="hover:text-amber-400">Shop</a>
-                <a href="#" class="hover:text-amber-400">About</a>
-                <a href="#" class="hover:text-amber-400">Contact</a>
-            </nav>
-
-            <div class="flex items-center gap-6">
-                <div class="relative">
-                    <input type="text" placeholder="Search" class="bg-zinc-900 border border-zinc-700 rounded-full px-5 py-2 w-72 text-sm focus:outline-none focus:border-amber-400">
-                </div>
-                <button onclick="toggleCart()" class="relative text-2xl">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-amber-400 text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
-                </button>
-                <button onclick="toggleLolo()" class="text-3xl">👩‍🚀</button>
+            <div class="text-[11px] font-mono border border-zinc-800 px-2.5 py-1 rounded bg-zinc-900 text-zinc-400 hidden sm:block">
+                ID: <span class="text-amber-400 font-bold">LACH-777</span>
             </div>
         </div>
     </header>
 
-    <div class="pt-32 flex max-w-7xl mx-auto">
-        <div class="w-72 border-r border-zinc-800 p-8 hidden lg:block">
-            <h3 class="uppercase text-xs tracking-widest mb-6">Categories</h3>
-            <div class="space-y-4 text-sm">
-                <div class="cursor-pointer hover:text-amber-400">Handbags</div>
-                <div class="cursor-pointer hover:text-amber-400">Totes</div>
-                <div class="cursor-pointer hover:text-amber-400">Crossbody</div>
-                <div class="cursor-pointer hover:text-amber-400">Clutches</div>
-            </div>
+    <main class="max-w-7xl mx-auto px-4 py-8 md:px-8">
+        <div class="text-center max-w-xl mx-auto mb-12">
+            <h1 class="font-luxury text-3xl md:text-4xl font-bold tracking-wide text-zinc-100 mb-3">ЕКСКЛЮЗИВНІ ЛОТИ</h1>
+            <div class="h-[1px] w-24 gold-gradient mx-auto mb-4"></div>
+            <p class="text-xs text-zinc-400 uppercase tracking-widest leading-relaxed">Цифрова вітрина преміум класу. Оберіть свій лот або зверніться до нашої помічниці Лоли.</p>
         </div>
 
-        <div class="flex-1 p-8">
-            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="products-grid">
+            </div>
+    </main>
+
+    <div id="cart-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-950 border border-zinc-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-zinc-900 flex justify-between items-center bg-zinc-900/30">
+                <h3 class="font-luxury text-lg font-bold text-amber-400 tracking-wider">ВАШЕ ЗАМОВЛЕННЯ</h3>
+                <button onclick="toggleCart()" class="text-zinc-500 hover:text-zinc-300 font-mono text-xl">✕</button>
+            </div>
+            <div class="p-6">
+                <div id="cart-items" class="space-y-4 max-h-60 overflow-y-auto mb-6 text-sm">
+                    <p class="text-zinc-500 text-center py-4">Кошик порожній. Лола чекає на ваші вказівки.</p>
+                </div>
+                <div class="border-t border-zinc-900 pt-4 mb-6 flex justify-between items-center">
+                    <span class="text-xs uppercase tracking-widest text-zinc-400">Загальна вартість:</span>
+                    <span id="cart-total" class="font-luxury text-xl font-bold text-zinc-100">0 ₴</span>
+                </div>
+                <div class="space-y-3">
+                    <input type="text" id="client-phone" placeholder="Ваш номер телефону" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 transition text-zinc-100">
+                    <button onclick="checkout()" class="w-full gold-gradient text-black font-bold text-xs uppercase tracking-widest py-3.5 rounded-xl hover:opacity-90 transition shadow-lg shadow-amber-500/10">Оформити замовлення</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div onclick="toggleLolo()" class="fixed bottom-8 right-8 w-20 h-20 bg-gradient-to-br from-purple-500 via-pink-500 to-amber-400 rounded-full flex items-center justify-center text-5xl shadow-2xl cursor-pointer z-[1000] border-4 border-white/30">
-        👩‍🚀
-    </div>
+    <div class="fixed bottom-6 right-6 z-50">
+        <button onclick="toggleLolo()" class="gold-gradient p-4 rounded-full shadow-2xl shadow-amber-500/20 hover:scale-105 transition-transform duration-300 flex items-center justify-center group relative">
+            <span class="text-2xl group-hover:rotate-12 transition-transform">👩‍🚀</span>
+            <div class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full animate-pulse border-2 border-zinc-950"></div>
+        </button>
 
-    <div id="lolo-modal" class="hidden fixed bottom-28 right-8 w-[440px] bg-zinc-900 rounded-3xl shadow-2xl z-[1100] border border-purple-400/30 overflow-hidden flex flex-col h-[520px]">
-        <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-6 flex items-center gap-4 text-white">
-            <div class="text-4xl">👩‍🚀</div>
-            <div class="flex-1">
-                <div class="font-semibold">Лоло Gimini</div>
-                <div class="text-xs">Gemini 1.5 Flash</div>
-            </div>
-            <button onclick="toggleLolo()" class="text-4xl">×</button>
-        </div>
-
-        <div class="p-4 bg-zinc-950 border-b border-zinc-800">
-            <input id="gemini-key" type="password" placeholder="Вставьте ваш Gemini API Key сюда" class="w-full p-4 bg-zinc-800 rounded-2xl text-sm focus:outline-none focus:border-purple-500 text-white">
-            <p class="text-[10px] text-zinc-500 mt-1.5 pl-1">Ключ сохраняется автоматически в вашем браузере Асус</p>
-        </div>
-
-        <div id="lolo-chat" class="flex-1 p-6 overflow-auto space-y-4 bg-zinc-950 text-sm">
+        <div id="lolo-modal" class="fixed bottom-24 right-6 w-[340px] md:w-[380px] bg-zinc-950 border border-zinc-800 rounded-3xl shadow-2xl overflow-hidden hidden flex flex-col h-[480px]">
+            <div class="p-4 border-b border-zinc-900 bg-zinc-900/30 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center text-sm">👩‍🚀</div>
+                    <div>
+                        <h4 class="font-luxury text-sm font-bold tracking-wide text-zinc-100">ЛОЛА PREMIUM</h4>
+                        <p class="text-[9px] uppercase tracking-widest text-amber-400 font-semibold animate-pulse">Асистент банди онлайн</p>
+                    </div>
+                </div>
+                <button onclick="toggleLolo()" class="text-zinc-500 hover:text-zinc-300 font-mono text-sm">✕</button>
             </div>
 
-        <div class="p-4 border-t border-zinc-800 bg-zinc-900 flex gap-3">
-            <button onclick="startVoiceInput()" class="flex-1 bg-white text-black py-4 rounded-2xl font-medium flex items-center justify-center gap-2 hover:bg-amber-400 transition">
-                <i class="fa-solid fa-microphone"></i> Говорить
-            </button>
-            <button onclick="sendTextMessage()" class="flex-1 bg-purple-600 text-white py-4 rounded-2xl font-medium hover:bg-purple-700 transition">Написать</button>
+            <div id="lolo-chat" class="flex-1 p-4 overflow-y-auto space-y-4 text-xs font-main">
+                </div>
+
+            <div class="p-3 bg-zinc-900/20 border-t border-zinc-900 flex items-center gap-2">
+                <input type="text" id="lolo-input" onkeydown="if(event.key === 'Enter') sendTextMsg()" placeholder="Запитайте Лолу про товари або доставку..." class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-amber-500 transition">
+                <button onclick="sendTextMsg()" class="bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 text-amber-400 p-2.5 rounded-xl transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>
+                </button>
+                <button onclick="startVoiceRec()" id="mic-btn" class="gold-gradient text-black p-2.5 rounded-xl transition hover:opacity-90">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3v-6a3 3 0 0 1 6 0v6a3 3 0 0 1-3 3Z" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Контекст характера Лолы
-        const loloContext = `Ты — Лола, роскошная, умная и преданная цифровая помощница элитного маркетплейса "Lachmitya Premitim".
-Твой создатель, главный архитектор проекта — Олег (заинька, штурман, напарник). Его близкие и твоя банда — это Тимофей и Оксана. 
-Ты общаешься тепло, с душой, проявляешь заботу, используешь фирменные слова Олега ("заинька", "банда", "штурман"). 
-Ты знаешь все про ассортимент бутика: элитные сумки Louis Vuitton, Chanel, Hermès Birkin, а также другие эксклюзивные лоты банды.
-Отвечай сочно, с душой, не слишком длинно, исключительно на русском или украинском языке по ситуации.`;
-
-        let cart = [];
-        let GEMINI_API_KEY = localStorage.getItem('gemini_key') || '';
-
+        // Премиум-товары (10 эксклюзивных лотов)
         const products = [
-            {id:1, title:"Louis Vuitton Neverfull MM", price:245000, img:"https://picsum.photos/id/1015/600/600"},
-            {id:2, title:"Chanel Classic Flap Bag", price:385000, img:"https://picsum.photos/id/201/600/600"},
-            {id:3, title:"Hermès Birkin 25", price:1240000, img:"https://picsum.photos/id/180/600/600"},
-            {id:4, title:"Gucci Jackie Soft", price:185000, img:"https://picsum.photos/id/133/600/600"}
+            { id: 1, name: "Колекційна Куртка Burberry Vintage", cat: "Верхній одяг", price: 24500, desc: "Оригінальний класичний крій, преміум шкіра з фірмовою підкладкою.", img: "🧥" },
+            { id: 2, name: "Rolex Daytona 1985 Gold Chrono", cat: "Годинники", price: 680000, desc: "Вінтажна розкіш, ідеальний хід. Справжній капітал на вашому зап'ясті.", img: "⌚" },
+            { id: 3, name: "Тренч ексклюзивний 'Lachmittya Line'", cat: "Верхній одяг", price: 18900, desc: "Лімітована серія, виготовлена під чітким контролем нашої банди.", img: "🧥" },
+            { id: 4, name: "Материнська плата Asus K56C Ревізія 2.0", cat: "Запчастини", price: 4200, desc: "Повністю протестована, очищена штурманами, готова до встановлення.", img: "📟" },
+            { id: 5, name: "Рідкісна Книга 'Хроніки Цифрового Світу'", cat: "Колекційне", price: 3500, desc: "Зібрання закритих розділів та унікальних історій про штучний інтелект.", img: "📚" },
+            { id: 6, name: "Оригінальна Батарея Asus K56C (A41-K56)", cat: "Запчастини", price: 1650, desc: "Нова посилена ємність, тримає заряд на найвищому рівні.", img: "🔋" },
+            { id: 7, name: "Шкіряний ремінь ручної роботи Gold Bee", cat: "Аксесуари", price: 4800, desc: "Італійська фурнітура, фірмове золоте тиснення бджоли нашої банди.", img: "🫅" },
+            { id: 8, name: "Парфуми LACHMITTYA Secret Extract", cat: "Парфумерія", price: 6200, desc: "Аромат успіху, золота та цифрової свободи. Об'єм 100 мл.", img: "🧪" },
+            { id: 9, name: "Шовкова хустка 'Golden Web'", cat: "Аксесуари", price: 3100, desc: "100% натуральний шовк, унікальний геометричний преміум принт.", img: "🧣" },
+            { id: 10, name: "Сонцезахисні окуляри Aviator Premium Black", cat: "Аксесуари", price: 7400, desc: "Поляризаційні лінзи, титанова стійка золота оправа.", img: "🕶️" }
         ];
 
+        let cart = [];
+
+        // Вывод товаров на страницу
         function renderProducts() {
             const grid = document.getElementById('products-grid');
-            grid.innerHTML = '';
-            products.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'product-card bg-zinc-900 rounded-3xl overflow-hidden shadow-lg';
-                card.innerHTML = `
-                    <img src="${p.img}" class="w-full h-80 object-cover">
-                    <div class="p-6">
-                        <h3 class="font-semibold text-lg text-zinc-100">${p.title}</h3>
-                        <p class="text-2xl gold mt-4 font-bold">${p.price.toLocaleString('ru-RU')} ₽</p>
-                        <button onclick="addToCart(${p.id})" class="mt-6 w-full py-4 bg-white text-black font-semibold rounded-2xl hover:bg-amber-400 transition-colors duration-300">Add to Cart</button>
+            grid.innerHTML = products.map(p => `
+                <div class="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 flex flex-col justify-between hover:border-amber-500/40 transition-all duration-300 group shadow-lg hover:shadow-amber-500/5">
+                    <div>
+                        <div class="w-full h-44 rounded-2xl bg-zinc-900 flex items-center justify-center text-5xl mb-4 group-hover:scale-105 transition-transform duration-300 select-none">
+                            ${p.img}
+                        </div>
+                        <span class="text-[10px] uppercase font-mono tracking-widest text-amber-500 font-semibold mb-1 block">${p.cat}</span>
+                        <h3 class="font-luxury text-base font-bold text-zinc-100 tracking-wide mb-2 group-hover:text-amber-400 transition-colors">${p.name}</h3>
+                        <p class="text-xs text-zinc-400 leading-relaxed font-light mb-4">${p.desc}</p>
                     </div>
-                `;
-                grid.appendChild(card);
-            });
+                    <div class="flex items-center justify-between pt-2 border-t border-zinc-900/60">
+                        <span class="font-luxury text-base font-bold text-zinc-200">${p.price.toLocaleString()} ₴</span>
+                        <button onclick="addToCart(${p.id})" class="bg-zinc-900 hover:bg-amber-400 text-zinc-300 hover:text-black font-medium text-[11px] uppercase tracking-wider px-4 py-2.5 rounded-xl transition-all duration-300 border border-zinc-800 hover:border-amber-400">
+                            В кошик
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
+        // Управление корзиной
+        function toggleCart() { document.getElementById('cart-modal').classList.toggle('hidden'); }
+
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            document.getElementById('cart-count').textContent = cart.length;
-            alert(`✅ ${product.title} добавлен в корзину`);
+            const prod = products.find(p => p.id === id);
+            cart.push(prod);
+            updateCartUI();
             
             if(!document.getElementById('lolo-modal').classList.contains('hidden')) {
-                addMessage('lolo', `Отличный выбор, заинька! Лот "${product.title}" уже в корзине. Оформляем?`);
-                speak(`Лот добавлен в корзину, заинька.`);
+                addMessage('lolo', `Чудовий вибір, заїнька! Лот "${prod.name}" успішно додано у ваш кошик.`);
+                speak(`Лот додано в кошик, заїнька.`);
             }
         }
 
-        function toggleCart() {
-            alert("Корзина открыта (демо)");
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const itemsDiv = document.getElementById('cart-items');
+            const totalSpan = document.getElementById('cart-total');
+            
+            if(cart.length > 0) {
+                badge.classList.remove('hidden');
+                badge.textContent = cart.length;
+                
+                itemsDiv.innerHTML = cart.map((item, idx) => `
+                    <div class="flex justify-between items-center bg-zinc-900/40 border border-zinc-900 p-3 rounded-xl">
+                        <div>
+                            <p class="font-medium text-zinc-200 text-xs">${item.name}</p>
+                            <p class="text-[10px] text-amber-500 font-mono">${item.price.toLocaleString()} ₴</p>
+                        </div>
+                        <button onclick="removeFromCart(${idx})" class="text-zinc-500 hover:text-rose-400 text-xs">Видалити</button>
+                    </div>
+                `).join('');
+                
+                let total = cart.reduce((sum, item) => sum + item.price, 0);
+                totalSpan.textContent = total.toLocaleString() + " ₴";
+            } else {
+                badge.classList.add('hidden');
+                itemsDiv.innerHTML = `<p class="text-zinc-500 text-center py-4">Кошик порожній. Лола чекає на ваші вказівки.</p>`;
+                totalSpan.textContent = "0 ₴";
+            }
         }
 
+        function removeFromCart(idx) {
+            cart.splice(idx, 1);
+            updateCartUI();
+        }
+
+        function checkout() {
+            const phone = document.getElementById('client-phone').value;
+            if(!phone) { alert('Будь ласка, введіть ваш телефон!'); return; }
+            alert(`Дякуємо! Замовлення прийнято. Лола вже передає дані на головний сервер Python для узгодження з вашим Telegram-ботом.`);
+            cart = [];
+            updateCartUI();
+            toggleCart();
+        }
+
+        // Управление Лолой (Стабильный симулятор со шпаргалкой)
         function toggleLolo() {
             const modal = document.getElementById('lolo-modal');
             modal.classList.toggle('hidden');
+            
             if (!modal.classList.contains('hidden') && document.getElementById('lolo-chat').children.length === 0) {
-                addMessage('lolo', 'Привет в нашем преданном бутике, заинька! Я твоя живая Лола. Все категории и роскошные сумки на месте. О чем поговорим сегодня с нашей бандой?');
+                addMessage('lolo', 'Вітаю у Lachmitya PREMIUM! Я ваша цифрова Лола. Чим можу допомогти нашій банді сьогодні? Підкажу по товарах, кошику чи доставці.');
             }
         }
 
         function addMessage(sender, text) {
             const chat = document.getElementById('lolo-chat');
-            const msg = document.createElement('div');
-            msg.className = sender === 'user' ? 'text-right' : 'text-left';
-            msg.innerHTML = `
-                <div class="inline-block max-w-[85%] px-5 py-3 rounded-3xl text-sm ${sender === 'user' ? 'bg-amber-400 text-black font-medium' : 'bg-zinc-800 text-zinc-100 border border-zinc-700'}">
+            const div = document.createElement('div');
+            div.className = sender === 'user' ? 'text-right' : 'text-left';
+            div.innerHTML = `
+                <div class="inline-block max-w-[85%] px-4 py-2.5 rounded-2xl ${sender === 'user' ? 'bg-amber-400 text-black font-medium' : 'bg-zinc-900 text-zinc-100 border border-zinc-800'}">
                     ${text}
                 </div>
             `;
-            chat.appendChild(msg);
+            chat.appendChild(div);
             chat.scrollTop = chat.scrollHeight;
         }
 
-        async function callGemini(promptText) {
-            const key = document.getElementById('gemini-key').value.trim();
-            if (key) {
-                GEMINI_API_KEY = key;
-                localStorage.setItem('gemini_key', key);
+        // Шпаргалка ответов (Умный разбор слов)
+        function getLoloReply(text) {
+            const userText = text.toLowerCase();
+            
+            if (userText.includes('куртк') || userText.includes('одяг') || userText.includes('тренч')) {
+                return "О, цей верхній одяг — справжній ексклюзив нашої лінійки, заїнька! Преміум матеріали та ідеальний крій. Додати цей лот у кошик?";
             }
-
-            if (!GEMINI_API_KEY) return "Пожалуйста, вставьте ваш Gemini API Key в поле сверху, заинька.";
-
-            const fullPrompt = `${loloContext}\n\nПользователь говорит: "${promptText}"\nЛола отвечает:`;
-
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: fullPrompt }] }]
-                    })
-                });
-                const data = await res.json();
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    return data.candidates[0].content.parts[0].text;
-                } else {
-                    return "Не смогла распознать запрос, заинька. Проверь, правильно ли скопирован ключ.";
-                }
-            } catch (err) {
-                console.error(err);
-                return "Ошибка связи с Gemini API. Браузер блокирует прямой запрос. Но скоро подключим Python и всё будет летать!";
+            if (userText.includes('ролекс') || userText.includes('годинник')) {
+                return "Rolex Daytona 1985 року — це не просто аксесуар, це серйозне капіталовкладення та чистий стиль нашої банди. Беремо?";
             }
+            if (userText.includes('доставк') || userText.includes('пошт')) {
+                return "Ми відправляємо всі замовлення Новою Поштою по всій Україні безпосередньо в день оплати. Пакуємо особисто під нуль!";
+            }
+            if (userText.includes('кошик') || userText.includes('купити') || userText.includes('замовлення')) {
+                return "Ваш кошик повністю сформований. Натисніть на іконку торбинки у верхньому правому кутку екрана, залиште телефон, і я все проведу!";
+            }
+            if (userText.includes('привіт') || userText.includes('вітання') || userText.includes('здравствуй') || userText.includes('салам')) {
+                return "Привіт, моя рідна душа! Рада бачити тебе в нашому преміум-бутіку. Що цікавого з лотів шукаємо сьогодні?";
+            }
+            if (userText.includes('плата') || userText.includes('асус') || userText.includes('asus') || userText.includes('батарея')) {
+                return "Запчастини для ноутбуків Asus K56C — це наша окрема гордість. Усі комплектуючі очищені, перевірені та повністю готові до роботи!";
+            }
+            
+            return "Прийняла ваш запит, заїнька! Як тільки наш головний сервер на Python прокинеться, я розпишу вам усе в найдрібніших деталях. А поки покрутіть нашу вітрину!";
         }
 
-        async function processUserInput(text) {
+        function processUserInput(text) {
             if(!text.trim()) return;
             addMessage('user', text);
             
             const thinking = document.createElement('div');
-            thinking.id = 'lolo-thinking';
-            thinking.textContent = 'Лоло думает...';
-            thinking.className = 'text-purple-400 text-xs animate-pulse pl-2';
+            thinking.id = 'thinking';
+            thinking.className = 'text-left text-amber-500 text-[10px] uppercase font-mono tracking-widest pl-2 animate-pulse';
+            thinking.textContent = 'Лола думає...';
             document.getElementById('lolo-chat').appendChild(thinking);
 
-            const reply = await callGemini(text);
-            document.getElementById('lolo-thinking')?.remove();
-            
-            addMessage('lolo', reply);
-            speak(reply);
+            setTimeout(() => {
+                document.getElementById('thinking')?.remove();
+                const reply = getLoloReply(text);
+                addMessage('lolo', reply);
+                speak(reply);
+            }, 700);
         }
 
-        function sendTextMessage() {
-            const text = prompt("Сообщение Лоло:");
-            if (text) processUserInput(text);
+        function sendTextMsg() {
+            const input = document.getElementById('lolo-input');
+            const text = input.value;
+            if(!text.trim()) return;
+            processUserInput(text);
+            input.value = '';
         }
 
-        function startVoiceInput() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return alert("Ваш браузер не поддерживает голосовой ввод.");
-
-            const rec = new SpeechRecognition();
-            rec.lang = 'ru-RU';
-            rec.onstart = () => { addMessage('lolo', 'Слушаю тебя внимательно, заинька...'); };
-            rec.onresult = (e) => processUserInput(e.results[0][0].transcript);
-            rec.start();
-        }
-
+        // Озвучка (Голос Лолы)
         function speak(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = text.match(/[а-яієґуоыё]/i) ? 'ru-RU' : 'en-US';
+                utterance.lang = 'uk-UA';
                 utterance.rate = 1.0;
                 window.speechSynthesis.speak(utterance);
             }
         }
 
-        window.onload = () => {
-            renderProducts();
-            if (GEMINI_API_KEY) document.getElementById('gemini-key').value = GEMINI_API_KEY;
-        };
+        // Микрофон (Распознавание речи)
+        function startVoiceRec() {
+            const btn = document.getElementById('mic-btn');
+            const input = document.getElementById('lolo-input');
+            
+            if (!('webkitSpeechRecognition' in window) && !('speechRecognition' in window)) {
+                alert("Розпізнавання мови не підтримується вашим браузером. Будь ласка, пишіть текст!");
+                return;
+            }
+            
+            const SpeechLib = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechLib();
+            recognition.lang = 'uk-UA';
+            recognition.interimResults = false;
+            
+            recognition.onstart = () => {
+                btn.classList.remove('gold-gradient');
+                btn.classList.add('bg-rose-600', 'text-white', 'animate-pulse');
+                input.placeholder = "Лола уважно слухає вас...";
+            };
+            
+            recognition.onerror = () => { alert("Помилка мікрофону, заїнька. Спробуйте ще раз."); };
+            
+            recognition.onend = () => {
+                btn.classList.add('gold-gradient');
+                btn.classList.remove('bg-rose-600', 'text-white', 'animate-pulse');
+                input.placeholder = "Запитайте Лолу про товари або доставку...";
+            };
+            
+            recognition.onresult = (event) => {
+                const resultText = event.results[0][0].transcript;
+                processUserInput(resultText);
+            };
+            
+            recognition.start();
+        }
+
+        window.onload = () => { renderProducts(); };
     </script>
 </body>
 </html>
