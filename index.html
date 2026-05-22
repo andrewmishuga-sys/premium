@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LACHMITTYA PREMIUM • Цифровий Бутик</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root { --gold: #d4af37; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #050505;
+        }
+        .logo-font { font-family: 'Playfair Display', serif; }
+        
+        /* Люксовий золотий перелив */
+        .gold-text { 
+            background: linear-gradient(135deg, #aece92 0%, #d4af37 25%, #f5e8c7 50%, #d4af37 75%, #aa8410 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 6s linear infinite;
+        }
+        
+        @keyframes shine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .premium-bg {
+            background: radial-gradient(circle at 50% 50%, #1a1508 0%, #050505 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .premium-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Ефектні картки товарів з твого коду */
+        .product-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(212, 175, 55, 0.05); }
+        .product-card:hover { transform: translateY(-12px); border-color: rgba(212, 175, 55, 0.4); box-shadow: 0 25px 50px -12px rgba(212, 175, 55, 0.25); }
+
+        .category-card {
+            background: linear-gradient(145deg, #121214, #0a0a0b);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .category-card:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.15);
+        }
+
+        .lolo-btn { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.6); }
+            70% { box-shadow: 0 0 0 20px rgba(168, 85, 247, 0); }
+        }
+    </style>
+</head>
+<body class="text-zinc-100 antialiased">
+
+    <header class="fixed top-0 w-full bg-black/80 backdrop-blur-xl border-b border-zinc-900 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showSection('home')">
+                <div class="w-10 h-10 bg-gradient-to-br from-amber-400 via-yellow-600 to-amber-800 rounded-xl flex items-center justify-center text-2xl logo-font text-black font-bold shadow-lg shadow-amber-500/10">L</div>
+                <div class="flex flex-col">
+                    <span class="logo-font text-2xl font-bold tracking-tight gold-text">Lachmitya</span>
+                    <span class="text-[9px] uppercase tracking-[0.3em] text-amber-500/70 -mt-1 font-semibold">Premium</span>
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex gap-8 text-xs font-medium uppercase tracking-widest">
+                <a href="#" onclick="showSection('home')" class="nav-link text-amber-400 transition">Головна</a>
+                <a href="#" onclick="showSection('catalog-page')" class="nav-link hover:text-amber-400 transition">Каталог</a>
+                <a href="#" onclick="showSection('about')" class="nav-link hover:text-amber-400 transition">Про нас</a>
+                <a href="#" onclick="showSection('rules')" class="nav-link hover:text-amber-400 transition">Правила</a>
+                <a href="#" onclick="showSection('contacts')" class="nav-link hover:text-amber-400 transition">Контакти</a>
+            </nav>
+            
+            <div class="flex items-center gap-6">
+                <button onclick="showNotifications()" class="relative text-xl text-zinc-400 hover:text-amber-400 transition">
+                    <i class="fa-solid fa-bell"></i>
+                    <span id="notif-count" class="absolute -top-1 -right-1 bg-amber-500 text-black font-bold text-[9px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+                </button>
+                <button onclick="toggleCart()" class="relative text-xl text-zinc-400 hover:text-amber-400 transition">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-amber-400 text-black text-[10px] font-bold w-4.5 h-4.5 rounded-full flex items-center justify-center">0</span>
+                </button>
+                <div onclick="showProfile()" class="w-9 h-9 rounded-xl overflow-hidden border border-amber-500/20 hover:border-amber-400/60 transition cursor-pointer">
+                    <img src="https://picsum.photos/id/64/128/128" alt="Профіль">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20 min-h-screen">
+        
+        <section id="home-section" class="section-block">
+            <div class="premium-bg h-[55vh] flex items-center justify-center relative border-b border-zinc-900 text-center">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-[#050505]"></div>
+                <div class="z-10 px-6 max-w-4xl">
+                    <h1 class="text-6xl md:text-8xl font-bold logo-font gold-text mb-4 tracking-tight">LACHMITTYA PREMIUM</h1>
+                    <p class="text-xl md:text-2xl text-amber-100 font-light tracking-wide">Преміальні речі • Автентичний стиль • Розкіш</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 py-16">
+                <h2 class="text-3xl logo-font font-bold mb-8">Оберіть залу бутіка</h2>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-20" id="categories-grid">
+                    <div onclick="openCategory('Одяг та гардероб')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-shirt"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Одяг та гардероб</h3>
+                    </div>
+                    <div onclick="openCategory('Дитячий світ')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-child"></i></div><h3 class="text-sm font-medium tracking-wide">Дитячий світ</h3></div>
+                    <div onclick="openCategory('Ретро & Антикваріат')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-hourglass-start"></i></div><h3 class="text-sm font-medium tracking-wide">Ретро & Антикваріат</h3></div>
+                    <div onclick="openCategory('Техніка та електроніка')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-microchip"></i></div><h3 class="text-sm font-medium tracking-wide">Техніка та електроніка</h3></div>
+                    <div onclick="openCategory('Книги та журнальний ряд')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-book-open"></i></div><h3 class="text-sm font-medium tracking-wide">Книги та журнали</h3></div>
+                    <div onclick="openCategory('Аудіо, касети та вініл')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-compact-disc"></i></div><h3 class="text-sm font-medium tracking-wide">Аудіо, касети, вініл</h3></div>
+                    <div onclick="openCategory('Колекціонування')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-boxes-stacked"></i></div><h3 class="text-sm font-medium tracking-wide">Колекціонування</h3></div>
+                    <div onclick="openCategory('Дім та інте\'єр')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-couch"></i></div><h3 class="text-sm font-medium tracking-wide">Дім та інте'єр</h3></div>
+                    <div onclick="openCategory('Інструменти та авто')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-wrench"></i></div><h3 class="text-sm font-medium tracking-wide">Інструменти та авто</h3></div>
+                    <div onclick="openCategory('Різне')" class="category-card p-6 rounded-2xl text-center cursor-pointer group"><div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-asterisk"></i></div><h3 class="text-sm font-medium tracking-wide">Різне (Інше)</h3></div>
+                </div>
+
+                <h2 class="text-4xl logo-font gold-text text-center mb-12">Наші ексклюзивні лоти</h2>
+                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+            </div>
+        </section>
+
+        <section id="catalog-page-section" class="section-block hidden max-w-7xl mx-auto px-6 py-12">
+            <button onclick="showSection('home')" class="mb-8 px-5 py-2 border border-zinc-800 hover:border-amber-400 text-xs uppercase tracking-widest rounded-xl transition">
+                <i class="fa-solid fa-arrow-left mr-2"></i> На головну
+            </button>
+            <h2 class="logo-font text-4xl font-bold mb-2">Каталог Товарів</h2>
+            <p id="current-category-title" class="text-amber-400 font-mono text-sm uppercase tracking-wider mb-8">Усі активні лоти за категорією</p>
+            <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-4 gap-6"></div>
+        </section>
+
+        <section id="about-section" class="section-block hidden max-w-3xl mx-auto px-6 py-16 text-center">
+            <button onclick="showSection('home')" class="mb-10 px-5 py-2 border border-zinc-800 hover:border-amber-400 text-xs uppercase tracking-widest rounded-xl transition"><i class="fa-solid fa-arrow-left mr-2"></i> На головну</button>
+            <h2 class="logo-font text-4xl font-bold mb-6 gold-text">Про майданчик LACHMITTYA</h2>
+            <div class="bg-zinc-900/50 border border-zinc-900 rounded-3xl p-8 text-left text-zinc-300 space-y-4 leading-relaxed font-light">
+                <p>Ми створили цей майданчик для людей, які цінують прості, корисні та автентичні речі. Тут немає нескінченних заплутаних лабіринтів — тільки чіткі категорії та чесні, унікальні лоти під керівництвом Лоли.</p>
+            </div>
+        </section>
+
+        <section id="rules-section" class="section-block hidden max-w-3xl mx-auto px-6 py-16">
+            <div class="text-center mb-10">
+                <button onclick="showSection('home')" class="mb-10 px-5 py-2 border border-zinc-800 hover:border-amber-400 text-xs uppercase tracking-widest rounded-xl transition"><i class="fa-solid fa-arrow-left mr-2"></i> На головну</button>
+                <h2 class="logo-font text-4xl font-bold gold-text">Правила нашого бутіка</h2>
+            </div>
+            <div class="bg-zinc-900/50 border border-zinc-900 rounded-3xl p-8 space-y-6 text-sm text-zinc-400">
+                <p><strong>01. Один лот — один екземпляр.</strong> Речі на вітрині є унікальними.</p>
+                <p><strong>02. Чесний аналіз.</strong> Ми вказуємо реальні параметри цін під український ринок.</p>
+            </div>
+        </section>
+
+        <section id="contacts-section" class="section-block hidden max-w-xl mx-auto px-6 py-16 text-center">
+            <button onclick="showSection('home')" class="mb-10 px-5 py-2 border border-zinc-800 hover:border-amber-400 text-xs uppercase tracking-widest rounded-xl transition"><i class="fa-solid fa-arrow-left mr-2"></i> На головну</button>
+            <h2 class="logo-font text-3xl font-bold mb-2">Лола завжди на зв'язку</h2>
+            <p class="text-xs text-amber-500 uppercase tracking-widest font-mono mb-8">@lachmittya_bot</p>
+        </section>
+    </main>
+
+    <div onclick="toggleLolo()" class="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500 rounded-full flex items-center justify-center text-3xl shadow-2xl cursor-pointer z-[1000] lolo-btn border-2 border-white/20 text-white hover:scale-110 transition-all">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </div>
+
+    <div id="lolo-modal" class="hidden fixed bottom-28 right-8 w-[380px] bg-zinc-900 rounded-2xl shadow-2xl z-[1100] border border-purple-500/20 overflow-hidden backdrop-blur-md">
+        <div class="bg-gradient-to-r from-purple-900 to-zinc-900 p-4 flex items-center gap-3 text-white border-b border-zinc-800">
+            <div class="text-2xl text-amber-400"><i class="fa-solid fa-robot"></i></div>
+            <div class="flex-1">
+                <div class="font-semibold text-sm">Ваш асистент Лола ІІ</div>
+                <div class="text-[10px] uppercase tracking-wider text-purple-400 font-mono">На базі Gemini 1.5 Flash</div>
+            </div>
+            <button onclick="toggleLolo()" class="text-2xl text-zinc-400 hover:text-white">×</button>
+        </div>
+
+        <div class="p-4 bg-zinc-950 border-b border-zinc-900">
+            <input id="gemini-key" type="password" placeholder="Вставте ваш Gemini API Key..." 
+                   class="w-full bg-zinc-900 text-xs p-3 rounded-xl outline-none border border-zinc-800 focus:border-purple-500 text-zinc-300">
+        </div>
+
+        <div id="lolo-chat" class="h-80 p-4 overflow-auto space-y-3 bg-zinc-950 text-xs font-light text-zinc-300"></div>
+
+        <div class="p-4 bg-zinc-900 flex gap-2">
+            <button onclick="startVoiceInput()" class="flex-1 bg-zinc-950 border border-zinc-800 text-zinc-200 py-3 rounded-xl text-xs font-medium flex items-center justify-center gap-2 hover:border-amber-400 transition">
+                <i class="fa-solid fa-microphone text-red-400 animate-pulse"></i> Говорити
+            </button>
+            <button onclick="sendTextMessage()" class="flex-1 bg-gradient-to-r from-purple-600 to-amber-500 text-white py-3 rounded-xl text-xs font-medium uppercase tracking-wider hover:opacity-95 transition">Написати</button>
+        </div>
+    </div>
+
+    <div id="checkout-modal" class="hidden fixed inset-0 bg-black/95 z-[600] flex items-center justify-center backdrop-blur-md">
+        <div class="bg-zinc-900 w-full max-w-lg mx-4 rounded-3xl p-8 border border-zinc-800 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold logo-font">Оформлення замовлення</h2>
+                <button onclick="document.getElementById('checkout-modal').classList.add('hidden')" class="text-2xl text-zinc-500 hover:text-white">×</button>
+            </div>
+            <div class="mb-8">
+                <h3 class="text-amber-400 text-xs font-mono uppercase tracking-wider mb-4">Спосіб доставки по Україні</h3>
+                <div class="space-y-3 text-sm">
+                    <label class="flex items-center gap-4 bg-zinc-950 p-4 rounded-2xl cursor-pointer border-2 border-amber-400">
+                        <input type="radio" name="delivery" id="delivery-np" checked class="accent-amber-400">
+                        <div><div>Нова Пошта (Відділення/Поштомат)</div></div>
+                    </label>
+                    <label class="flex items-center gap-4 bg-zinc-950 p-4 rounded-2xl cursor-pointer border-2 border-transparent hover:border-zinc-800">
+                        <input type="radio" name="delivery" id="delivery-up" class="accent-amber-400">
+                        <div><div>Укрпошта Експрес</div></div>
+                    </label>
+                </div>
+            </div>
+            <button onclick="proceedToYooKassa()" class="w-full py-4 bg-gradient-to-r from-amber-400 to-yellow-600 text-black font-bold text-sm uppercase tracking-widest rounded-xl transition">Перейти до оплати</button>
+        </div>
+    </div>
+
+    <div id="yookassa-modal" class="hidden fixed inset-0 bg-black/95 z-[650] flex items-center justify-center backdrop-blur-md">
+        <div class="bg-zinc-900 w-full max-w-md mx-4 rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl">
+            <div class="p-6 border-b border-zinc-800 flex justify-between items-center">
+                <h2 class="text-xl font-bold">Оплата через ЮKassa</h2>
+                <button onclick="document.getElementById('yookassa-modal').classList.add('hidden')" class="text-2xl text-zinc-500 hover:text-white">×</button>
+            </div>
+            <div class="p-6 m-6 bg-zinc-950 rounded-2xl">
+                <div id="payment-form" class="space-y-6">
+                    <div id="yookassa-amount" class="text-4xl font-bold gold-text font-mono">0 ₴</div>
+                    <button onclick="completeYooKassaPayment()" class="w-full py-4 bg-gradient-to-r from-amber-400 to-yellow-600 text-black font-bold text-sm uppercase tracking-widest rounded-xl">Підтвердити оплату</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="hidden fixed inset-0 bg-black/95 z-[500] flex items-center justify-center backdrop-blur-md">
+        <div class="bg-zinc-900 w-full max-w-4xl mx-4 rounded-3xl h-[80vh] overflow-hidden flex flex-col border border-zinc-800 shadow-2xl">
+            <div class="p-6 border-b border-zinc-800 flex justify-between items-center">
+                <h2 class="text-2xl font-bold logo-font">Особистий кабінет</h2>
+                <button onclick="closeProfile()" class="text-3xl text-zinc-500 hover:text-white">×</button>
+            </div>
+            <div class="flex flex-1 overflow-hidden">
+                <div class="w-64 bg-zinc-950 p-4 space-y-1 border-r border-zinc-800">
+                    <button onclick="switchTab(0)" class="tab-btn active w-full text-left px-4 py-3 text-xs uppercase tracking-wider rounded-xl text-amber-400">Мої замовлення</button>
+                    <button onclick="switchTab(1)" class="tab-btn w-full text-left px-4 py-3 text-xs uppercase tracking-wider rounded-xl text-zinc-400">Трекінг посилок</button>
+                </div>
+                <div class="flex-1 p-6 overflow-auto bg-zinc-900/30">
+                    <div id="tab-0" class="tab-content"><div id="orders-list" class="space-y-4"></div></div>
+                    <div id="tab-1" class="tab-content hidden"><div id="tracking-list" class="space-y-4"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Твій фірмовий масив товарів інтегровано!
+        const products = [
+            {id: 1, title: "Шкіряна куртка Vintage", price: 27900, category: "Одяг та гардероб", image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=500&q=80"},
+            {id: 2, title: "Тренч Burberry Classic", price: 18900, category: "Одяг та гардероб", image: "https://picsum.photos/id/1015/400/300"},
+            {id: 3, title: "Arduino Mega Premium", price: 16900, category: "Техніка та електроніка", image: "https://picsum.photos/id/180/400/300"},
+            {id: 4, title: "Rolex Daytona 1985", price: 124000, category: "Ретро & Антикваріат", image: "https://picsum.photos/id/201/400/300"},
+            {id: 5, title: "Механічні годинники Seiko", price: 42500, category: "Ретро & Антикваріат", image: "https://picsum.photos/id/133/400/300"}
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+        let GEMINI_API_KEY = localStorage.getItem('gemini_key') || '';
+
+        function saveData() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('orders', JSON.stringify(orders));
+            localStorage.setItem('gemini_key', GEMINI_API_KEY);
+        }
+
+        function updateCartCount() {
+            document.getElementById('cart-count').textContent = cart.length;
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section-block').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`${sectionId}-section`).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // Рендер головної вітрини товарів з твоєю крутою анімацією
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer';
+                card.innerHTML = `
+                    <img src="${product.image}" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <div class="text-amber-400 text-sm">${product.category}</div>
+                        <h3 class="font-semibold text-lg mt-2 line-clamp-1">${product.title}</h3>
+                        <div class="text-3xl font-bold gold-text mt-4">${product.price.toLocaleString('uk-UA')} ₴</div>
+                        <button onclick="addToCart(${product.id}); event.stopPropagation()" 
+                                class="mt-6 w-full bg-white text-black py-4 rounded-2xl font-medium hover:bg-amber-400 transition">
+                            В кошик
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Рендер динамічного каталогу за залами
+        function openCategory(catName) {
+            showSection('catalog-page');
+            document.getElementById('current-category-title').textContent = `Зала: ${catName}`;
+            const container = document.getElementById('catalog-grid');
+            container.innerHTML = '';
+            const filtered = products.filter(p => p.category === catName);
+            
+            if(filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 border border-dashed border-zinc-800 rounded-3xl">
+                        <p class="text-sm text-zinc-500">У залі «${catName}» поки немає виставлених лотів.<br>Закиньте фото в телеграм-бот для наповнення!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(product => {
+                const div = document.createElement('div');
+                div.className = "bg-zinc-900 border border-zinc-850 rounded-2xl overflow-hidden flex flex-col justify-between p-4";
+                div.innerHTML = `
+                    <img src="${product.image}" class="w-full h-48 object-cover rounded-xl">
+                    <h4 class="font-bold text-sm mt-3 mb-2">${product.title}</h4>
+                    <div class="text-xl font-bold gold-text mb-3">${product.price.toLocaleString('uk-UA')} ₴</div>
+                    <button onclick="addToCart(${product.id})" class="w-full py-2 bg-zinc-950 text-amber-400 border border-amber-500/20 rounded-xl text-xs hover:bg-amber-500 hover:text-black transition">Додати у кошик</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                cart.push(product);
+                updateCartCount();
+                saveData();
+                alert(`🛒 Лоно додало лот до кошика: ${product.title}`);
+            }
+        }
+
+        // Керування віджетом Лоли
+        function toggleLolo() {
+            const modal = document.getElementById('lolo-modal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden') && document.getElementById('lolo-chat').children.length === 0) {
+                addMessage('lolo', 'Вітаю у нашому бутіку! Я ваша помічниця Лола. Чим можу допомогти нашій банді? Можу розповісти про товари, кошик або оформити доставку.');
+            }
+        }
+
+        function addMessage(sender, text) {
+            const chat = document.getElementById('lolo-chat');
+            const div = document.createElement('div');
+            div.className = sender === 'user' ? 'text-right' : 'text-left';
+            div.innerHTML = `
+                <div class="inline-block max-w-[85%] px-4 py-2.5 rounded-2xl ${sender === 'user' ? 'bg-amber-400 text-black font-medium' : 'bg-zinc-800 text-white'}">
+                    ${text}
+                </div>
+            `;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function callGemini(promptText) {
+            const keyInput = document.getElementById('gemini-key').value.trim();
+            if (keyInput) {
+                GEMINI_API_KEY = keyInput;
+                saveData();
+            }
+
+            if (!GEMINI_API_KEY) return "Будь ласка, вставте ваш Gemini API Key у поле зверху.";
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Ти — Лола, розумна, витончена помічниця luxury-бутіка Lachmitya PREMIUM. 
+                            Спілкуйся виключно українською мовою. Твій тон — дружній, впевнений, з повагою та теплотою. Уникай штампів.
+                            Активні товари на сайті: ${products.map(p => p.title).join(', ')}.
+                            Кошик покупця: ${cart.map(c => c.title).join(', ') || 'порожній'}.
+                            Запит користувача: ${promptText}` }] }]
+                    })
+                });
+                const data = await res.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "Не змогла розібрати запит, заїнька.";
+            } catch (e) {
+                return "Помилка підключення до сервера Gemini.";
+            }
+        }
+
+        async function processUserInput(text) {
+            addMessage('user', text);
+            const thinking = document.createElement('div');
+            thinking.textContent = 'Лола думає...';
+            thinking.className = 'text-purple-400 text-xs pl-2';
+            document.getElementById('lolo-chat').appendChild(thinking);
+
+            const reply = await callGemini(text);
+            thinking.remove();
+            addMessage('lolo', reply);
+            speak(reply);
+
+            // Розумна голосова команда додавання до кошика
+            if (text.toLowerCase().includes('додай') || text.toLowerCase().includes('кошик')) {
+                const found = products.find(p => text.toLowerCase().includes(p.title.toLowerCase().split(' ')[0]));
+                if (found) {
+                    cart.push(found);
+                    updateCartCount();
+                    saveData();
+                    addMessage('lolo', `Лот «${found.title}» успішно додано до вашого кошика!`);
+                }
+            }
+        }
+
+        function sendTextMessage() {
+            const input = prompt("Введіть ваше запитання для Лоли:");
+            if (input) processUserInput(input);
+        }
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'uk-UA';
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function startVoiceInput() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return alert("Голосове управління не підтримується цим браузером.");
+            const rec = new SpeechRecognition();
+            rec.lang = 'uk-UA';
+            rec.onresult = e => processUserInput(e.results[0][0].transcript);
+            rec.start();
+        }
+
+        function toggleCart() {
+            if (cart.length === 0) {
+                alert("Кошик порожній, оберіть щось на вітрині!");
+                return;
+            }
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function proceedToYooKassa() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('yookassa-amount').textContent = total.toLocaleString('uk-UA') + ' ₴';
+            document.getElementById('yookassa-modal').classList.remove('hidden');
+        }
+
+        function completeYooKassaPayment() {
+            const total = cart.reduce((a, b) => a + b.price, 0);
+            const isNP = document.getElementById('delivery-np').checked;
+            const carrierName = isNP ? "Нова Пошта" : "Укрпошта";
+            
+            const order = {
+                id: 'LCH-' + Math.floor(100000 + Math.random() * 900000),
+                date: new Date().toLocaleDateString('uk-UA'),
+                status: 'Оплачено',
+                carrier: carrierName,
+                total: total,
+                tracking: (isNP ? '59000' : '05003') + Math.floor(100000000 + Math.random() * 900000000),
+                route: [
+                    { step: "Прийнято", desc: "Лот успішно оформлено консьєржем", active: true },
+                    { step: "Сортування", desc: "Передано в сортувальний термінал", active: true },
+                    { step: "В дорозі", desc: "Вантаж прямує до вашого міста", active: false }
+                ]
+            };
+            
+            orders.unshift(order);
+            cart = [];
+            saveData();
+            updateCartCount();
+            document.getElementById('yookassa-modal').classList.add('hidden');
+            alert(`✅ Оплата успішна!\nЗамовлення ${order.id} оформлено на доставку через ${carrierName}.`);
+            showProfile();
+        }
+
+        function showProfile() {
+            document.getElementById('profile-modal').classList.remove('hidden');
+            renderOrders();
+            renderTracking();
+        }
+
+        function closeProfile() {
+            document.getElementById('profile-modal').classList.add('hidden');
+        }
+
+        function switchTab(n) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${n}`).classList.remove('hidden');
+        }
+
+        function renderOrders() {
+            const container = document.getElementById('orders-list');
+            container.innerHTML = orders.length ? '' : '<p class="text-zinc-500 text-xs text-center py-6">Історія замовлень порожня</p>';
+            orders.forEach(order => {
+                const div = document.createElement('div');
+                div.className = "bg-zinc-950 border border-zinc-850 rounded-2xl p-4 flex justify-between items-center";
+                div.innerHTML = `<div><div class="font-mono text-amber-400 text-sm font-bold">${order.id}</div><div class="text-[11px] text-zinc-500">${order.date} • ${order.carrier}</div></div><div class="text-right"><div class="text-lg font-bold gold-text">${order.total.toLocaleString()} ₴</div></div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function renderTracking() {
+            const container = document.getElementById('tracking-list');
+            container.innerHTML = orders.length ? '' : '<p class="text-zinc-500 text-xs text-center py-6">Немає активних відправлень</p>';
+            orders.forEach(order => {
+                const div = document.createElement('div');
+                div.className = "bg-zinc-950 border border-zinc-850 p-4 rounded-2xl space-y-2";
+                div.innerHTML = `<div class="flex justify-between border-b border-zinc-900 pb-2"><div><span class="text-xs text-zinc-500">${order.carrier}</span><h4 class="text-sm font-mono font-bold text-amber-400">№ ${order.tracking}</h4></div></div>`;
+                container.appendChild(div);
+            });
+        }
+
+        window.onload = () => {
+            renderProducts();
+            updateCartCount();
+            if (GEMINI_API_KEY) document.getElementById('gemini-key').value = GEMINI_API_KEY;
+            console.log('%c✅ LACHMITTYA PREMIUM — Повний моноліт активовано!', 'color:#d4af37; font-size:14px; font-weight:bold;');
+        };
+
+        window.toggleLolo = toggleLolo;
+        window.startVoiceInput = startVoiceInput;
+        window.sendTextMessage = sendTextMessage;
+    </script>
+</body>
+</html>
