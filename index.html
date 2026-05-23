@@ -6,25 +6,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-black text-white">
-    <div id="chat-container" class="max-w-md mx-auto mt-20 p-6 bg-zinc-900 rounded-3xl">
-        <div id="messages" class="h-64 overflow-y-auto mb-4 border-b border-amber-900"></div>
-        <input id="user-input" class="w-full p-3 bg-zinc-800 rounded-xl outline-none" placeholder="Що вас цікавить?">
-        <button onclick="send()" class="w-full mt-2 p-3 bg-amber-500 rounded-xl text-black font-bold">Надіслати</button>
+    <div id="chat-window" class="fixed bottom-10 right-10 w-96 bg-zinc-900 p-6 rounded-3xl border border-amber-900">
+        <div id="messages" class="h-64 overflow-y-auto mb-4 text-sm"></div>
+        <input id="user-input" class="w-full bg-zinc-800 p-3 rounded-xl mb-2" placeholder="Запитай Лолу...">
+        <button onclick="askGemini()" class="w-full bg-amber-500 py-3 rounded-xl font-bold text-black">Надіслати</button>
     </div>
 
     <script>
-        async function send() {
+        async function askGemini() {
             const input = document.getElementById('user-input');
             const msg = input.value;
+            // Сюда ты вставляешь свой ключ, он будет работать прямо из браузера
             const API_KEY = "ВСТАВ_СЮДИ_API_KEY"; 
             
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{ parts: [{ text: msg }] }] })
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ contents: [{ parts: [{ text: "Ти Лола. Відповідь: " + msg }] }] })
             });
             const data = await res.json();
-            document.getElementById('messages').innerHTML += `<p>Лола: ${data.candidates[0].content.parts[0].text}</p>`;
+            document.getElementById('messages').innerHTML += `<p><b>Лола:</b> ${data.candidates[0].content.parts[0].text}</p>`;
             input.value = '';
         }
     </script>
