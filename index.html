@@ -1,24 +1,426 @@
-<script>
-    async function askLola(userPrompt) {
-        const apiKey = "ВСТАВ_СЮДИ_СВІЙ_API_KEY"; // Твой ключ от Google AI Studio
-        const chat = document.getElementById('lolo-chat'); 
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LACHMITTYA PREMIUM • Цифровий Бутик</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+       
+        :root { --gold: #d4af37; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+        }
+        .logo-font { font-family: 'Playfair Display', serif; }
+       
+        .gold-text {
+            background: linear-gradient(135deg, #aece92 0%, #d4af37 25%, #f5e8c7 50%, #d4af37 75%, #aa8410 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 6s linear infinite;
+        }
+       
+        @keyframes shine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .premium-bg {
+            background: radial-gradient(circle at 50% 50%, #1a1508 0%, #050505 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .category-card {
+            background: linear-gradient(145deg, #121214, #0a0a0b);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .category-card:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.15);
+        }
+        .lolo-btn { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.6); }
+            70% { box-shadow: 0 0 0 20px rgba(168, 85, 247, 0); }
+        }
+    </style>
+</head>
+<body class="text-zinc-100 antialiased">
 
-        // Запрос к Gemini
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: `Ти Лола, помічниця Олега. Відповідь: ${userPrompt}` }] }]
-            })
-        });
-        
-        const data = await response.json();
-        const reply = data.candidates[0].content.parts[0].text;
-        
-        // Вывод ответа (подставь свой ID элемента чата)
-        chat.innerHTML += `<div class="p-2 border-b border-zinc-800">Лола: ${reply}</div>`;
-        
-        // Голос
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(reply));
-    }
-</script>
+    <!-- HEADER -->
+    <header class="fixed top-0 w-full bg-black/80 backdrop-blur-xl border-b border-zinc-900 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showSection('home')">
+                <div class="w-10 h-10 bg-gradient-to-br from-amber-400 via-yellow-600 to-amber-800 rounded-xl flex items-center justify-center text-2xl logo-font text-black font-bold shadow-lg shadow-amber-500/10">L</div>
+                <div class="flex flex-col">
+                    <span class="logo-font text-2xl font-bold tracking-tight gold-text">Lachmitya</span>
+                    <span class="text-[9px] uppercase tracking-[0.3em] text-amber-500/70 -mt-1 font-semibold">Premium</span>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex gap-8 text-xs font-medium uppercase tracking-widest">
+                <a href="#" onclick="showSection('home')" class="hover:text-amber-400 transition">Головна</a>
+                <a href="#" onclick="showSection('catalog-page')" class="hover:text-amber-400 transition">Каталог</a>
+                <a href="#" onclick="showSection('about')" class="hover:text-amber-400 transition">Про нас</a>
+                <a href="#" onclick="showSection('rules')" class="hover:text-amber-400 transition">Правила</a>
+                <a href="#" onclick="showSection('contacts')" class="hover:text-amber-400 transition">Контакти</a>
+            </nav>
+
+            <div class="flex items-center gap-6">
+                <button onclick="showNotifications()" class="relative text-xl text-zinc-400 hover:text-amber-400 transition">
+                    <i class="fa-solid fa-bell"></i>
+                    <span id="notif-count" class="absolute -top-1 -right-1 bg-amber-500 text-black font-bold text-[9px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+                </button>
+                <button onclick="toggleCart()" class="relative text-xl text-zinc-400 hover:text-amber-400 transition">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-amber-400 text-black text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </button>
+                <div onclick="showProfile()" class="w-9 h-9 rounded-xl overflow-hidden border border-amber-500/20 hover:border-amber-400/60 transition cursor-pointer">
+                    <img src="https://picsum.photos/id/64/128/128" alt="Профіль">
+                </div>
+                <button id="hamburger" class="md:hidden text-2xl text-zinc-300">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/95 border-t border-zinc-800 py-4">
+            <div class="flex flex-col px-6 gap-4 text-sm">
+                <a href="#" onclick="showSection('home');toggleMobileMenu()" class="py-2">Головна</a>
+                <a href="#" onclick="showSection('catalog-page');toggleMobileMenu()" class="py-2">Каталог</a>
+                <a href="#" onclick="showSection('about');toggleMobileMenu()" class="py-2">Про нас</a>
+                <a href="#" onclick="showSection('rules');toggleMobileMenu()" class="py-2">Правила</a>
+                <a href="#" onclick="showSection('contacts');toggleMobileMenu()" class="py-2">Контакти</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20 min-h-screen">
+
+        <!-- HOME SECTION -->
+        <section id="home-section" class="section-block">
+            <div class="premium-bg min-h-[45vh] flex flex-col items-center justify-center text-center px-4 border-b border-zinc-900 py-12">
+                <div class="relative z-10 max-w-3xl mx-auto">
+                    <span class="text-xs uppercase tracking-[0.4em] text-amber-500 font-semibold mb-4 block">Цифровий Бутик Віднайденої Естетики</span>
+                    <h1 class="logo-font text-5xl md:text-7xl font-bold tracking-tight text-white mb-6">
+                        LACHMITTYA <span class="gold-text italic font-normal">PREMIUM</span>
+                    </h1>
+                    <p class="text-zinc-400 text-sm md:text-base max-w-xl mx-auto font-light leading-relaxed">
+                        Кожен лот — це окрема історія, відібрана експертним оком та керована інтелектом Лоли. Простота навігації, безкомпромісна якість.
+                    </p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 py-16">
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <h2 class="logo-font text-3xl font-bold">Оберіть залу бутіка</h2>
+                    </div>
+                    <button onclick="showSection('catalog-page')" class="text-xs uppercase tracking-widest text-amber-400 hover:underline">Усі товари →</button>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="categories-grid">
+                    <div onclick="openCategory('Одяг та гардероб')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-shirt"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Одяг та гардероб</h3>
+                    </div>
+                    <div onclick="openCategory('Дитячий світ')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-child"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Дитячий світ</h3>
+                    </div>
+                    <div onclick="openCategory('Ретро & Антикваріат')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-hourglass-start"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Ретро & Антикваріат</h3>
+                    </div>
+                    <div onclick="openCategory('Техніка та електроніка')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-microchip"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Техніка та електроніка</h3>
+                    </div>
+                    <div onclick="openCategory('Книги та журнальний ряд')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-book-open"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Книги та журнали</h3>
+                    </div>
+                    <div onclick="openCategory('Аудіо, касети та вініл')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-compact-disc"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Аудіо, касети, вініл</h3>
+                    </div>
+                    <div onclick="openCategory('Колекціонування')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Колекціонування</h3>
+                    </div>
+                    <div onclick="openCategory('Дім та інтер\'єр')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-couch"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Дім та інтер'єр</h3>
+                    </div>
+                    <div onclick="openCategory('Інструменти та авто')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-wrench"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Інструменти та авто</h3>
+                    </div>
+                    <div onclick="openCategory('Різне')" class="category-card p-6 rounded-2xl text-center cursor-pointer group">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-amber-500/5 text-amber-400 rounded-xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-black transition-all duration-300"><i class="fa-solid fa-asterisk"></i></div>
+                        <h3 class="text-sm font-medium tracking-wide">Різне</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATALOG SECTION -->
+        <section id="catalog-page-section" class="section-block hidden max-w-7xl mx-auto px-6 py-12">
+            <button onclick="showSection('home')" class="mb-8 px-5 py-2 border border-zinc-800 hover:border-amber-400 text-xs uppercase tracking-widest rounded-xl transition">
+                ← На головну
+            </button>
+            <h2 class="logo-font text-4xl font-bold mb-2">Каталог Товарів</h2>
+            <p id="current-category-title" class="text-amber-400 font-mono text-sm uppercase tracking-wider mb-8">Усі активні лоти</p>
+            <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about-section" class="section-block hidden max-w-3xl mx-auto px-6 py-16 text-center">
+            <button onclick="showSection('home')" class="mb-10 px-5 py-2 border border-zinc-800 hover:border-amber-400 text-xs uppercase tracking-widest rounded-xl transition">
+                ← На головну
+            </button>
+            <h2 class="logo-font text-4xl font-bold mb-6 gold-text">Про майданчик LACHMITTYA</h2>
+            <div class="bg-zinc-900/50 border border-zinc-900 rounded-3xl p-8 text-left text-zinc-300 space-y-4 leading-relaxed font-light">
+                <p class="font-medium text-white text-lg">Ласкаво просимо до нашого цифрового простору!</p>
+                <p>Ми створили цей майданчик для людей, які цінують прості, корисні та автентичні речі. Тут немає нескінченних заплутаних лабіринтів — тільки чіткі категорії та чесні, унікальні лоти.</p>
+                <p>Наш каталог функціонує за підтримки розумного асистента Лоли.</p>
+            </div>
+        </section>
+
+        <!-- RULES SECTION -->
+        <section id="rules-section" class="section-block hidden max-w-3xl mx-auto px-6 py-16">
+            <div class="text-center mb-10">
+                <button onclick="showSection('home')" class="mb-10 px-5 py-2 border border-zinc-800 hover:border-amber-400 text-xs uppercase tracking-widest rounded-xl transition">
+                    ← На головну
+                </button>
+                <h2 class="logo-font text-4xl font-bold gold-text">Правила нашого бутіка</h2>
+            </div>
+            <div class="bg-zinc-900/50 border border-zinc-900 rounded-3xl p-8 space-y-6">
+                <div class="flex gap-4">
+                    <div class="text-amber-400 text-xl font-bold font-mono">01.</div>
+                    <div><h4 class="font-semibold text-white mb-1">Один лот — один екземпляр</h4><p class="text-sm text-zinc-400">Усі речі унікальні.</p></div>
+                </div>
+                <div class="flex gap-4 border-t border-zinc-900 pt-6">
+                    <div class="text-amber-400 text-xl font-bold font-mono">02.</div>
+                    <div><h4 class="font-semibold text-white mb-1">Швидке замовлення</h4><p class="text-sm text-zinc-400">Через асистента Лолу.</p></div>
+                </div>
+                <div class="flex gap-4 border-t border-zinc-900 pt-6">
+                    <div class="text-amber-400 text-xl font-bold font-mono">03.</div>
+                    <div><h4 class="font-semibold text-white mb-1">Чесне ціноутворення</h4><p class="text-sm text-zinc-400">Ціни адаптовані під ринок.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACTS SECTION -->
+        <section id="contacts-section" class="section-block hidden max-w-xl mx-auto px-6 py-16 text-center">
+            <button onclick="showSection('home')" class="mb-10 px-5 py-2 border border-zinc-800 hover:border-amber-400 text-xs uppercase tracking-widest rounded-xl transition">
+                ← На головну
+            </button>
+            <h2 class="logo-font text-3xl font-bold mb-2">Лола завжди на зв'язку</h2>
+            <div class="bg-zinc-900/50 border border-zinc-900 rounded-3xl p-8">
+                <a href="https://t.me/lachmittya_bot" target="_blank" class="block p-4 bg-zinc-950 border border-indigo-950 rounded-2xl hover:border-amber-400 transition">
+                    Написати Лолі в Telegram
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- FLOATING LOLA BUTTON -->
+    <div onclick="toggleLolo()" class="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-purple-600 via-pink-600 to-amber-500 rounded-full flex items-center justify-center text-3xl shadow-2xl cursor-pointer z-[1000] lolo-btn border-2 border-white/20 text-white">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </div>
+
+    <!-- LOLA MODAL -->
+    <div id="lolo-modal" class="hidden fixed bottom-28 right-8 w-[380px] bg-zinc-900 rounded-3xl shadow-2xl z-[1100] border border-purple-500/30 overflow-hidden">
+        <div class="bg-gradient-to-r from-purple-900 to-zinc-900 p-4 flex items-center gap-3 border-b border-zinc-800">
+            <div class="text-2xl text-amber-400"><i class="fa-solid fa-robot"></i></div>
+            <div class="flex-1">
+                <div class="font-semibold text-sm">Лола • Ваш асистент</div>
+                <div class="text-xs text-purple-400 font-mono">Gemini 1.5 Flash</div>
+            </div>
+            <button onclick="toggleLolo()" class="text-2xl text-zinc-400 hover:text-white">×</button>
+        </div>
+
+        <div class="p-4 bg-zinc-950 border-b border-zinc-800">
+            <input id="gemini-key" type="password" placeholder="Вставте Gemini API Key" class="w-full bg-zinc-900 text-xs p-3 rounded-xl outline-none border border-zinc-700 focus:border-purple-500">
+        </div>
+
+        <div id="lolo-chat" class="h-96 p-4 overflow-auto space-y-4 bg-zinc-950 text-sm"></div>
+
+        <div class="p-4 bg-zinc-900 border-t border-zinc-800 flex gap-2">
+            <button onclick="clearLoloChat()" class="px-4 text-zinc-500 hover:text-red-400"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="startVoiceInput()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 py-3 rounded-2xl text-xs font-medium flex items-center justify-center gap-2"><i class="fa-solid fa-microphone"></i> Говорити</button>
+            <button onclick="sendTextMessage()" class="flex-1 bg-gradient-to-r from-purple-600 to-amber-500 text-white py-3 rounded-2xl text-xs font-medium">Відправити</button>
+        </div>
+    </div>
+
+    <script>
+        // === ТОВАРИ ===
+        const sampleProducts = [
+            { name: "Колекційне видання «Цар звірів лев»", category: "Книги та журнальний ряд", price: 350, img: "https://picsum.photos/id/101/400/400", desc: "Рідкісне видання з унікальними ілюстраціями." },
+            { name: "Вінтажна плата Asus K56C", category: "Техніка та електроніка", price: 850, img: "https://picsum.photos/id/250/400/400", desc: "Протестована материнська плата." },
+            { name: "Ретро-касета «Акустика 1990»", category: "Аудіо, касети та вініл", price: 180, img: "https://picsum.photos/id/434/400/400", desc: "Оригінальний запис." },
+            { name: "Шкіряна куртка 1980-х", category: "Одяг та гардероб", price: 2450, img: "https://picsum.photos/id/201/400/400", desc: "Вінтажна шкіра, відмінний стан." },
+            { name: "Механічний годинник Полjot", category: "Ретро & Антикваріат", price: 1250, img: "https://picsum.photos/id/301/400/400", desc: "Радянський хронограф." },
+            { name: "Вінтажний фотоапарат Зеніт", category: "Техніка та електроніка", price: 980, img: "https://picsum.photos/id/180/400/400", desc: "Робочий стан." },
+            { name: "Книга «Майстер і Маргарита» 1978", category: "Книги та журнальний ряд", price: 420, img: "https://picsum.photos/id/133/400/400", desc: "Рідкісне видання." },
+            { name: "Вінтажний радіоприймач", category: "Ретро & Антикваріат", price: 750, img: "https://picsum.photos/id/160/400/400", desc: "Робочий." },
+            { name: "Дитяча іграшка 1970-х", category: "Дитячий світ", price: 320, img: "https://picsum.photos/id/201/400/400", desc: "Колекційна." }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let conversationHistory = [];
+
+        const systemPrompt = `Ти — Лола, елегантна та розумна консьєржка бутіку Lachmitya PREMIUM. Відповідай тільки українською, тепло та лаконічно.`;
+
+        // Основні функції
+        function showSection(section) {
+            document.querySelectorAll('.section-block').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`${section}-section`).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function openCategory(catName) {
+            showSection('catalog-page');
+            document.getElementById('current-category-title').textContent = catName || 'Усі товари';
+
+            const container = document.getElementById('catalog-grid');
+            container.innerHTML = '';
+
+            const filtered = catName ? sampleProducts.filter(p => p.category === catName) : sampleProducts;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-zinc-500">Поки немає товарів у цій категорії.</div>`;
+                return;
+            }
+
+            filtered.forEach(product => {
+                const div = document.createElement('div');
+                div.className = "bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden";
+                div.innerHTML = `
+                    <img src="${product.img}" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <span class="text-[10px] text-amber-500">${product.category}</span>
+                        <h4 class="font-bold text-sm mt-1 mb-2">${product.name}</h4>
+                        <p class="text-xs text-zinc-400 line-clamp-3">${product.desc}</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-xl font-bold gold-text">${product.price} ₴</span>
+                            <button onclick="addToCart('${product.name}', ${product.price})" class="px-5 py-2 bg-amber-400 hover:bg-amber-500 text-black text-xs font-medium rounded-xl transition">В кошик</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            alert(`✅ Додано: ${name}`);
+        }
+
+        function updateCartCount() {
+            document.getElementById('cart-count').textContent = cart.length;
+        }
+
+        function toggleCart() {
+            if (cart.length === 0) alert("Кошик порожній");
+            else alert("Перехід до оформлення (функціонал у розробці)");
+        }
+
+        // LOLA FUNCTIONS
+        function toggleLolo() {
+            const modal = document.getElementById('lolo-modal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden') && document.getElementById('lolo-chat').children.length === 0) {
+                addMessage('lolo', 'Привіт! Я Лола — твій персональний помічник. Чим допомогти?');
+            }
+        }
+
+        function addMessage(role, text) {
+            const chat = document.getElementById('lolo-chat');
+            const div = document.createElement('div');
+            div.className = role === 'user' ? 'text-right' : 'text-left';
+            div.innerHTML = `<div class="inline-block max-w-[85%] px-4 py-3 rounded-3xl ${role === 'user' ? 'bg-amber-400 text-black' : 'bg-zinc-800'}">${text}</div>`;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function callGemini(message) {
+            let key = document.getElementById('gemini-key').value.trim() || localStorage.getItem('gemini_key');
+            if (!key) return "Встав Gemini API Key";
+
+            conversationHistory.push({role: "user", parts: [{text: message}]});
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ contents: [{role: "user", parts: [{text: systemPrompt + "\nЗапит: " + message}]}] })
+                });
+                const data = await res.json();
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Не змогла відповісти...";
+                conversationHistory.push({role: "model", parts: [{text: reply}]});
+                return reply;
+            } catch (e) {
+                return "Помилка з'єднання з Gemini.";
+            }
+        }
+
+        async function processUserInput(text) {
+            addMessage('user', text);
+            const reply = await callGemini(text);
+            addMessage('lolo', reply);
+        }
+
+        function sendTextMessage() {
+            const text = prompt("Введіть повідомлення для Лоли:");
+            if (text) processUserInput(text);
+        }
+
+        function clearLoloChat() {
+            if (confirm("Очистити чат?")) {
+                conversationHistory = [];
+                document.getElementById('lolo-chat').innerHTML = '';
+            }
+        }
+
+        function startVoiceInput() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return alert("Голосовий ввід не підтримується");
+            const rec = new SpeechRecognition();
+            rec.lang = 'uk-UA';
+            rec.onresult = e => processUserInput(e.results[0][0].transcript);
+            rec.start();
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function showNotifications() {
+            alert("Сповіщення від Лоли:\n\n• Нові лоти в категорії Ретро");
+        }
+
+        function showProfile() {
+            alert("Особистий кабінет (в розробці)");
+        }
+
+        // Ініціалізація
+        window.onload = () => {
+            updateCartCount();
+            document.getElementById('gemini-key').value = localStorage.getItem('gemini_key') || '';
+            document.getElementById('hamburger').addEventListener('click', toggleMobileMenu);
+            console.log('%cLACHMITTYA PREMIUM з Лолою готово!', 'color:#d4af37; font-weight:bold');
+        };
+    </script>
+</body>
+</html>
